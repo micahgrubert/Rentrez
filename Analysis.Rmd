@@ -6,7 +6,7 @@ output: html_document
 ---
 
 github repository: https://github.com/micahgrubert/Rentrez
-```{r setup, include=FALSE}
+```{r setup, include=F}
 knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
 ```
@@ -14,6 +14,11 @@ library(dplyr)
 Creating a loop that outputs the counts of each nucleotide to a list specific to that nucleotide
 ```{r}
 seqs<-read.csv("./Sequences.csv")
+
+Adenine<-list()
+Thymine<-list()
+Guanine<-list()
+Cytosine<-list()
 
 for (i in 1:length(seqs$Sequence)) { # iterate through seqs dataframe
     AdenineOut<- nchar(gsub("[^A]","",seqs$Sequence[i])) #count all instances of A (by removing everything but A and counting characters)
