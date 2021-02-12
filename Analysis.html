@@ -384,26 +384,13 @@ summary {
 <p>Creating a loop that outputs the counts of each nucleotide to a list specific to that nucleotide</p>
 <pre class="r"><code>seqs&lt;-read.csv(&quot;./Sequences.csv&quot;)
 
-Adenine&lt;-list()
-Thymine&lt;-list()
-Guanine&lt;-list()
-Cytosine&lt;-list()
+Adenine&lt;- nchar(gsub(&quot;[^A]&quot;,&quot;&quot;,seqs$Sequence))
+Thymine&lt;- nchar(gsub(&quot;[^T]&quot;,&quot;&quot;,seqs$Sequence)) 
+Guanine&lt;- nchar(gsub(&quot;[^G]&quot;,&quot;&quot;,seqs$Sequence))
+Cytosine&lt;- nchar(gsub(&quot;[^C]&quot;,&quot;&quot;,seqs$Sequence))
 
-for (i in 1:length(seqs$Sequence)) { # iterate through seqs dataframe
-    AdenineOut&lt;- nchar(gsub(&quot;[^A]&quot;,&quot;&quot;,seqs$Sequence[i])) #count all instances of A (by removing everything but A and counting characters)
-      Adenine[[i]] &lt;- AdenineOut # output into a list
-    ThymineOut&lt;- nchar(gsub(&quot;[^T]&quot;,&quot;&quot;,seqs$Sequence[i])) #count all instances of T (by removing everything but T and counting characters)
-      Thymine[[i]] &lt;- ThymineOut # output each iteration into a list
-    GuanineOut&lt;- nchar(gsub(&quot;[^G]&quot;,&quot;&quot;,seqs$Sequence[i])) #count all instances of G (by removing everything but G and counting characters)
-      Guanine[[i]] &lt;- GuanineOut # output each iteration into a list
-    CytosineOut&lt;- nchar(gsub(&quot;[^C]&quot;,&quot;&quot;,seqs$Sequence[i])) #count all instances of C (by removing everything but C and counting characters)
-      Cytosine[[i]] &lt;- CytosineOut # output each iteration into a list
-}
-
-Adenine&lt;-unlist(Adenine) #turn each list into a vector
-Thymine&lt;-unlist(Thymine)
-Guanine&lt;-unlist(Guanine)
-Cytosine&lt;-unlist(Cytosine)</code></pre>
+basecounter&lt;- data.frame(Name = seqs$Name, Adenine = Adenine,
+                         Thymine = Thymine, Guanine = Guanine, Cytosine = Cytosine) #combine vectors creating new df</code></pre>
 <p>Print Sequence #1</p>
 <pre class="r"><code>print(seqs$Sequence[1])</code></pre>
 <pre><code>## [1] &quot;AGCATGCAAGTCAAACGAGATGTAGCAATACATCTAGTGGCGAACGGGTGAGTAACGCGTGGATGATCTACCTATGAGATGGGGATAACTATTAGAAATAGTAGCTAATACCGAATAAGGTCAATTAATTTGTTAATTGATGAAAGGAAGCCTTTAAAGCTTCGCTTGTAGATGAGTCTGCGTCTTATTAGTTAGTTGGTAGGGTAAATGCCTACCAAGGCGATGATAAGTAACCGGCCTGAGAGGGTGAACGGTCACACTGGAACTGAGACACGGTCCAGACTCCTACGGGAGGCAGCAGCTAAGAATCTTCCGCAATGGGCGAAAGCCTGACGGAGCGACACTGCGTGAATGAAGAAGGTCGAAAGATTGTAAAATTCTTTTATAAATGAGGAATAAGCTTTGTAGGAAATGACGAAGTGATGACGTTAATTTATGAATAAGCCCCGGCTAATTACGTGCCAGCAGCCGCGGTAATACG&quot;</code></pre>
@@ -414,11 +401,7 @@ Cytosine&lt;-unlist(Cytosine)</code></pre>
 <pre class="r"><code>print(seqs$Sequence[3])</code></pre>
 <pre><code>## [1] &quot;AGCATGCAAGTCAAACGAGATGTAGTAATACATCTAGTGGCGAACGGGTGAGTAACGCGTGGATGATCTACCTATGAGATGGGGATAACTATTAGAAATAGTAGCTAATACCGAATAAGGTCAATTAATTTGTTAATTGATGAAAGGAAGCCTTTAAAGCTTCGCTTGTAGATGAGTCTGCGTCTTATTAGTTAGTTGGTAGGGTAAATGCCTACCAAGGCGATGATAAGTAACCGGCCTGAGAGGGTGAACGGTCACACTGGAACTGAGACACGGTCCAGACTCCTACGGGAGGCAGCAGCTAAGAATCTTCCGCAATGGGCGAAAGCCTGACGGAGCGACACTGCGTGAATGAAGAAGGTCGAAAGATTGTAAAATTCTTTTATAAATGAGGAATAAGCTTTGTAGGAAATGACGAAGTGATGACGTTAATTTATGAATAAGCCCCGGCTAATTACGTGCCAGCAGCCGCGGTAATACG&quot;</code></pre>
 <p>Combine vectors from earlier into a dataframe to make a nice table</p>
-<pre class="r"><code>basecounter&lt;- data.frame(Name = seqs$Name, Adenine = Adenine,
-                         Thymine = Thymine, Guanine = Guanine, Cytosine = Cytosine) #combine vectors creating new df
-
-library(knitr) # load package for nicer tables
-kable(basecounter, caption = &quot;Nucleotide Counts for Borrelia burgdorferi 16s Genes&quot;)# create table</code></pre>
+<pre class="r"><code>kable(basecounter, caption = &quot;Nucleotide Counts for Borrelia burgdorferi 16s Genes&quot;)# create table</code></pre>
 <table style="width:100%;">
 <caption>Nucleotide Counts for Borrelia burgdorferi 16s Genes</caption>
 <colgroup>
