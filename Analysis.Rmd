@@ -65,6 +65,7 @@ https://en.wikipedia.org/wiki/Borrelia_burgdorferi
 
 ```{r}
 GC<- summarize("GC Content" = ((Guanine+Cytosine)/(Guanine+Cytosine+Adenine+Thymine))*100,basecounter) #calculate GC content
+
 SeqID<- c("HQ433692.1","HQ433694.1","HQ433691.1") #create a vector of sequence IDs
 
 GCtable<-data.frame("Sequence ID"=SeqID,"GC Content"=GC) #combine into a data.frame
