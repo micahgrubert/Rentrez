@@ -9,32 +9,20 @@ github repository: https://github.com/micahgrubert/Rentrez
 ```{r setup, include=F}
 knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
+library(knitr) # load package for nicer tables
 ```
 
 Creating a loop that outputs the counts of each nucleotide to a list specific to that nucleotide
 ```{r}
 seqs<-read.csv("./Sequences.csv")
 
-Adenine<-list()
-Thymine<-list()
-Guanine<-list()
-Cytosine<-list()
+Adenine<- nchar(gsub("[^A]","",seqs$Sequence))
+Thymine<- nchar(gsub("[^T]","",seqs$Sequence)) 
+Guanine<- nchar(gsub("[^G]","",seqs$Sequence))
+Cytosine<- nchar(gsub("[^C]","",seqs$Sequence))
 
-for (i in 1:length(seqs$Sequence)) { # iterate through seqs dataframe
-    AdenineOut<- nchar(gsub("[^A]","",seqs$Sequence[i])) #count all instances of A (by removing everything but A and counting characters)
-      Adenine[[i]] <- AdenineOut # output into a list
-    ThymineOut<- nchar(gsub("[^T]","",seqs$Sequence[i])) #count all instances of T (by removing everything but T and counting characters)
-      Thymine[[i]] <- ThymineOut # output each iteration into a list
-    GuanineOut<- nchar(gsub("[^G]","",seqs$Sequence[i])) #count all instances of G (by removing everything but G and counting characters)
-      Guanine[[i]] <- GuanineOut # output each iteration into a list
-    CytosineOut<- nchar(gsub("[^C]","",seqs$Sequence[i])) #count all instances of C (by removing everything but C and counting characters)
-      Cytosine[[i]] <- CytosineOut # output each iteration into a list
-}
-
-Adenine<-unlist(Adenine) #turn each list into a vector
-Thymine<-unlist(Thymine)
-Guanine<-unlist(Guanine)
-Cytosine<-unlist(Cytosine)
+basecounter<- data.frame(Name = seqs$Name, Adenine = Adenine,
+                         Thymine = Thymine, Guanine = Guanine, Cytosine = Cytosine) #combine vectors creating new df
 
 ```
 
@@ -55,12 +43,7 @@ print(seqs$Sequence[3])
 
 Combine vectors from earlier into a dataframe to make a nice table
 ```{r}
-basecounter<- data.frame(Name = seqs$Name, Adenine = Adenine,
-                         Thymine = Thymine, Guanine = Guanine, Cytosine = Cytosine) #combine vectors creating new df
-
-library(knitr) # load package for nicer tables
 kable(basecounter, caption = "Nucleotide Counts for Borrelia burgdorferi 16s Genes")# create table
-
 ```
 
 ![Borrelia burgdorferi](bburgdorferi.jpg)
