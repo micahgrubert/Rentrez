@@ -1,0 +1,74 @@
+---
+title: "Analysis"
+author: "Micah GVI"
+date: "11/02/2021"
+output: html_document
+---
+
+github repository: https://github.com/micahgrubert/Rentrez
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+```
+
+Creating a loop that outputs the counts of each nucleotide to a list specific to that nucleotide
+```{r}
+seqs<-read.csv("./Sequences.csv")
+
+for (i in 1:length(seqs$Sequence)) { # iterate through seqs dataframe
+    AdenineOut<- nchar(gsub("[^A]","",seqs$Sequence[i])) #count all instances of A (by removing everything but A and counting characters)
+      Adenine[[i]] <- AdenineOut # output into a list
+    ThymineOut<- nchar(gsub("[^T]","",seqs$Sequence[i])) #count all instances of T (by removing everything but T and counting characters)
+      Thymine[[i]] <- ThymineOut # output each iteration into a list
+    GuanineOut<- nchar(gsub("[^G]","",seqs$Sequence[i])) #count all instances of G (by removing everything but G and counting characters)
+      Guanine[[i]] <- GuanineOut # output each iteration into a list
+    CytosineOut<- nchar(gsub("[^C]","",seqs$Sequence[i])) #count all instances of C (by removing everything but C and counting characters)
+      Cytosine[[i]] <- CytosineOut # output each iteration into a list
+}
+
+Adenine<-unlist(Adenine) #turn each list into a vector
+Thymine<-unlist(Thymine)
+Guanine<-unlist(Guanine)
+Cytosine<-unlist(Cytosine)
+
+```
+
+Print Sequence #1
+```{r}
+print(seqs$Sequence[1])
+```
+
+Print Sequence #2
+```{r}
+print(seqs$Sequence[2])
+```
+
+Print Sequence #3
+```{r}
+print(seqs$Sequence[3])
+```
+
+Combine vectors from earlier into a dataframe to make a nice table
+```{r}
+basecounter<- data.frame(Name = seqs$Name, Adenine = Adenine,
+                         Thymine = Thymine, Guanine = Guanine, Cytosine = Cytosine) #combine vectors creating new df
+
+library(knitr) # load package for nicer tables
+kable(basecounter, caption = "Nucleotide Counts for Borrelia burgdorferi 16s Genes")# create table
+
+```
+
+![Borrelia burgdorferi](bburgdorferi.jpg)
+
+https://en.wikipedia.org/wiki/Borrelia_burgdorferi
+
+
+```{r}
+GC<- summarize("GC Content" = ((Guanine+Cytosine)/(Guanine+Cytosine+Adenine+Thymine))*100,basecounter) #calculate GC content
+SeqID<- c("HQ433692.1","HQ433694.1","HQ433691.1") #create a vector of sequence IDs
+
+GCtable<-data.frame("Sequence ID"=SeqID,"GC Content"=GC) #combine into a data.frame
+kable(GCtable, caption = "GC Content (%) in Borrelia burgdorferi 16s Genes") #produce kable table
+
+```
+
